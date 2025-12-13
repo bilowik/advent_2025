@@ -14,9 +14,6 @@ fn main() {
     let mut zero_count = 0;
 
     while !eof {
-        /*if value % 100 == 0 {
-            zero_count += 1;
-        }*/
         f_reader.read_line(&mut buf).expect("Error reading file.");
 
         if buf.is_empty() {
@@ -27,12 +24,15 @@ fn main() {
             prev_value = value; 
             value += change;
             zero_count += change.abs() / 100;
-            let remainder_sum = (prev_value % 100) + (change % 100);
-            zero_count += remainder_sum.abs() / 100;
-            if remainder_sum.signum() != (prev_value % 100).signum() {
-                zero_count += 1;
+            if (change % 100 != 0) && (prev_value % 100 != 0) {
+                let remainder_sum = (prev_value % 100) + (change % 100);
+                if remainder_sum.signum() != prev_value.signum() {
+                    zero_count += 1;
+                }
+                if remainder_sum.abs() > 99 {
+                    zero_count += 1;
+                }
             }
-            println!("prev: {}; curr: {}, change: {}, count: {}", prev_value, value, change, zero_count);
             buf.clear();
         }
     }
