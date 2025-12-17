@@ -7,10 +7,11 @@ fn main() {
     let reader = File::open(&input).expect("Failed to open input file");
     let ranges = io::read_to_string(reader)
         .expect("Failed to read from input file")
+        .replace("\n", "") // Remove trailing newline
         .split(",")
-        .map(|range| range.split("-").map(|range_part| range_part.parse::<u32>().expect("Not a number")).collect::<Vec<u32>>())
+        .map(|range| range.split("-").map(|range_part| range_part.parse::<u64>().expect(&format!("{} not a number", range_part))).collect::<Vec<u64>>())
         .map(|v| (v[0], v[1]))
-        .collect::<Vec<(u32, u32)>>();
+        .collect::<Vec<(u64, u64)>>();
 
     let mut result = 0;
 
