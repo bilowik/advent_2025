@@ -1,6 +1,6 @@
-use std::io;
 use std::env;
 use std::fs::File;
+use std::io;
 
 fn main() {
     let input = env::args().nth(1).expect("Missing file input argument");
@@ -9,7 +9,16 @@ fn main() {
         .expect("Failed to read from input file")
         .replace("\n", "") // Remove trailing newline
         .split(",")
-        .map(|range| range.split("-").map(|range_part| range_part.parse::<u64>().expect(&format!("{} not a number", range_part))).collect::<Vec<u64>>())
+        .map(|range| {
+            range
+                .split("-")
+                .map(|range_part| {
+                    range_part
+                        .parse::<u64>()
+                        .expect(&format!("{} not a number", range_part))
+                })
+                .collect::<Vec<u64>>()
+        })
         .map(|v| (v[0], v[1]))
         .collect::<Vec<(u64, u64)>>();
 
@@ -22,13 +31,11 @@ fn main() {
             if len % 2 == 0 {
                 // Even digits it may be invalid.
                 if &id_str[..(len / 2)] == &id_str[(len / 2)..] {
-                    result += id; 
+                    result += id;
                 }
             }
         }
     }
 
     println!("{}", result);
-    
-    
 }
