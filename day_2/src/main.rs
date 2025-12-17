@@ -26,12 +26,19 @@ fn main() {
 
     for (start, end) in ranges.iter().copied() {
         for id in start..=end {
-            let id_str = id.to_string();
-            let len = id_str.len();
-            if len % 2 == 0 {
-                // Even digits it may be invalid.
-                if &id_str[..(len / 2)] == &id_str[(len / 2)..] {
+            let s = id.to_string();
+            let len = s.len();
+
+            for group_size in (1..=(len / 2)).rev().filter(|size| len % size == 0) {
+                let chunks = s
+                    .chars()
+                    .collect::<Vec<_>>()
+                    .chunks(group_size)
+                    .map(|v| v.to_vec())
+                    .collect::<Vec<_>>();
+                if chunks.iter().skip(1).all(|chunk| chunk == &chunks[0]) {
                     result += id;
+                    break;
                 }
             }
         }
